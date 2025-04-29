@@ -7,6 +7,161 @@
 body {
   font-family: "JetBrains Mono", monospace;
   background-color: #efeeea;
+  padding: 0 2.25em;
+  display: grid;
+  grid-template-rows: minmax(50px, 100px) auto;
+  height: 100vh;
+  /* border: 2px solid blue; */
 }
 
 /* TYPOGRAPHY */
+
+.main__title {
+  font-size: 1.7rem;
+}
+
+.main__description {
+  font-size: 1.15rem;
+  line-height: 1.4;
+}
+
+/* Layout - introduction page */
+
+/* images */
+
+.nav__logo {
+  width: 40px;
+}
+
+.main__introduction-img {
+  width: 50%;
+  min-width: 150px;
+  max-width: 200px;
+  margin: 0 auto;
+  align-self: center;
+}
+
+/* elements */
+
+.nav {
+  align-self: center;
+}
+
+.main__introductionPage {
+  display: grid;
+  grid-template-rows: auto max-content max-content auto;
+  grid-template-areas:
+    "img"
+    "title"
+    "description"
+    "btn";
+  gap: 1em 0;
+  height: 90%;
+  /* border: 2px solid magenta; */
+}
+.main__introduction-img {
+  grid-area: img;
+}
+
+.main__title {
+  grid-area: title;
+  align-self: center;
+}
+
+.main__description {
+  grid-area: description;
+}
+
+.button {
+  padding: 1em 2em;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.button--getStarted {
+  grid-area: btn;
+  background-color: #005685;
+  color: white;
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: bold;
+  letter-spacing: 1.5px;
+  align-self: end;
+  transition: background-color 0.3s;
+
+  &:hover,
+  &:focus {
+    background-color: #0085cc;
+  }
+}
+
+/* media queries */
+
+@media (min-width: 470px) {
+  .main__introductionPage {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      ". ."
+      "title img"
+      "description img"
+      "btn .";
+  }
+
+  .main__title {
+    font-size: 1.95rem;
+  }
+
+  .button--getStarted {
+    justify-self: start;
+  }
+}
+
+@media (min-width: 700px) {
+  .nav,
+  .main__introductionPage {
+    max-width: 1300px;
+  }
+
+  .nav {
+    width: 100%;
+
+    justify-self: center;
+  }
+
+  .main__introductionPage {
+    margin: 0 auto;
+    align-content: center;
+    gap: 0;
+  }
+
+  .main__title {
+    align-self: end;
+    font-size: 2.25rem;
+    margin-bottom: 0.5em;
+  }
+
+  .main__description {
+    font-size: 1.3rem;
+  }
+
+  .main__introduction-img {
+    content: image-set("/src/img/food-photo-bigScreen.png") / "A bowl of salad";
+    max-width: 450px;
+    width: 100%;
+  }
+}
+
+@media (min-width: 1100px) {
+  .main__title {
+    font-size: 2.8vw;
+  }
+
+  .main__description {
+    font-size: 1.7vw;
+  }
+
+  .button--getStarted {
+    font-size: 1.05rem;
+  }
+}
