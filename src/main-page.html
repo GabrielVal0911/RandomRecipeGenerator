@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Random Recipe Generator</title>
+
+    <!-- fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- links -->
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
+    <nav class="nav">
+      <img
+        src="img/logo-food-nav.png"
+        alt="A logo that consists of cutlery and a green background."
+        class="nav__logo"
+      />
+    </nav>
+    <main class="main__introductionPage">
+      <img
+        src="img/cook-mainPage.png"
+        alt="An illustration to someone who cook"
+        class="mainPage--img"
+      />
+
+      <p class="main__description mainPage__description">
+        Online Random Recipe Generator tool helps you to quickly generate a
+        random recipe with a single click! 
+      </p>
+      <section class="recipe show">
+        <img
+          src="/src/img/meal-img-test.jpg"
+          alt="food-image"
+          class="recipe__img"
+        />
+        <span class="recipe__category">Category</span>
+        <h1 class="recipe__name">Meal Name</h1>
+        <h2 class="recipe__section-title">Ingredients</h2>
+        <ul class="recipe__ingredients-list">
+          <li class="recipe__ingredients-item">Coconut oil, - 1/1 tsp</li>
+          <li class="recipe__ingredients-item">Red Onion, - 1/2 small raw</li>
+          <li class="recipe__ingredients-item">Red bell pepper, -1/2 medium</li>
+          <li class="recipe__ingredients-item">Garlic, - 1/2 cloves, minced</li>
+        </ul>
+
+        <h2 class="recipe__section-title">Instructions</h2>
+
+        <ol class="recipe__instructions-list">
+          <li class="recipe__instruction-item">
+            In a large skillet, heat 2 tablespoons of olive oil over medium-high
+            heat. Season the chicken thighs with salt, pepper, garlic powder,
+            and ginger powder.
+          </li>
+          <li class="recipe__instruction-item">
+            Once the oil is hot, add the chicken thighs skin-side down. Sear for
+            about 5-7 minutes until the skin is golden brown, then flip and cook
+            for an additional 5 minutes.
+          </li>
+        </ol>
+      </section>
+      <button class="button button--generate">Generate</button>
+    </main>
+  </body>
+</html>
