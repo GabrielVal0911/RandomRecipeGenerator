@@ -1,5 +1,52 @@
+// gets elements from html
 const buttonGenerate = document.getElementById("button--generate");
 const mainPageDescription = document.getElementById("mainPage__description");
+const mainIntroductionPage = document.getElementById("main__introductionPage");
+const mainPageImg = document.getElementById("mainPage--img");
+
+// create html elements
+const recipeSection = document.createElement("section");
+const recipeImg = document.createElement("img");
+const recipeName = document.createElement("h1");
+const recipeCategory = document.createElement("span");
+const recipeIngredients = document.createElement("h2");
+const recipeInstructions = document.createElement("h2");
+const recipeIngredientsList = document.createElement("ul");
+const recipeInstructionsList = document.createElement("ol");
+
+// add css classes to html elements
+recipeSection.classList.add("recipe");
+recipeSection.classList.add("hidden");
+
+recipeImg.classList.add("recipe__img");
+
+recipeName.classList.add("recipe__name");
+
+recipeCategory.classList.add("recipe__category");
+
+recipeIngredients.classList.add("recipe__section-title");
+recipeIngredients.textContent = "Ingredients";
+
+recipeIngredientsList.classList.add("recipe__ingredients-list");
+
+recipeInstructions.classList.add("recipe__section-title");
+recipeInstructions.textContent = "Instructions";
+
+recipeInstructionsList.classList.add("recipe__instructions-list");
+
+// Append all html elements to the recipeSection
+recipeSection.append(
+  recipeImg,
+  recipeName,
+  recipeCategory,
+  recipeIngredients,
+  recipeIngredientsList,
+  recipeInstructions,
+  recipeInstructionsList
+);
+
+// Insert recipeSection to the main element in HTML
+mainPageDescription.insertAdjacentElement("afterend", recipeSection);
 
 async function getRecipe() {
   const url = "https://www.themealdb.com/api/json/v1/1/random.php";
@@ -12,12 +59,46 @@ async function getRecipe() {
     const recipe = await response.json();
     getRecipeHTML(recipe.meals[0]);
   } catch (error) {
-    // add a function in case api doesnt work
-    console.error(error.message);
+    const p = document.createElement("p");
+    p.classList.add("error-message");
+    p.textContent =
+      "There was a problem loading the recipe. Here's a backup one for you!";
+
+    mainIntroductionPage.insertAdjacentElement("afterbegin", p);
+
+    const fallbackRecipe = {
+      idMeal: "52771",
+      strMeal: "Spicy Arrabiata Penne",
+      strMealAlternate: null,
+      strCategory: "Vegetarian",
+      strArea: "Italian",
+      strInstructions:
+        "Bring a large pot of water to a boil. Add kosher salt to the boiling water, then add the pasta. Cook according to the package instructions, about 9 minutes.\r\nIn a large skillet over medium-high heat, add the olive oil and heat until the oil starts to shimmer. Add the garlic and cook, stirring, until fragrant, 1 to 2 minutes. Add the chopped tomatoes, red chile flakes, Italian seasoning and salt and pepper to taste. Bring to a boil and cook for 5 minutes. Remove from the heat and add the chopped basil.\r\nDrain the pasta and add it to the sauce. Garnish with Parmigiano-Reggiano flakes and more basil and serve warm.",
+      strMealThumb:
+        "https://www.themealdb.com/images/media/meals/ustsqw1468250014.jpg",
+      strTags: "Pasta,Curry",
+      strIngredient1: "penne rigate",
+      strIngredient2: "olive oil",
+      strIngredient3: "garlic",
+      strIngredient4: "chopped tomatoes",
+      strIngredient5: "red chilli flakes",
+      strIngredient6: "italian seasoning",
+      strIngredient7: "basil",
+      strIngredient8: "Parmigiano-Reggiano",
+      strMeasure1: "1 pound",
+      strMeasure2: "1/4 cup",
+      strMeasure3: "3 cloves",
+      strMeasure4: "1 tin ",
+      strMeasure5: "1/2 teaspoon",
+      strMeasure6: "1/2 teaspoon",
+      strMeasure7: "6 leaves",
+      strMeasure8: "sprinkling",
+    };
+    getRecipeHTML(fallbackRecipe);
+
+    console.error("API error:", error.message);
   }
 }
-
-getRecipe();
 
 function getRecipeHTML(recipe) {
   // get all keys from recipe object
@@ -26,37 +107,11 @@ function getRecipeHTML(recipe) {
   let measureKeys = [];
   let ingredientKeys = [];
 
-  // create html elements
-  const recipeSection = document.createElement("section");
-  const recipeImg = document.createElement("img");
-  const recipeName = document.createElement("h1");
-  const recipeCategory = document.createElement("span");
-  const recipeIngredients = document.createElement("h2");
-  const recipeInstructions = document.createElement("h2");
-  const recipeIngredientsList = document.createElement("ul");
-  const recipeInstructionsList = document.createElement("ol");
+  recipeImg.src = recipe.strMealThumb;
 
-  // add css classes to html elements
-  recipeSection.classList.add("recipe");
+  recipeName.textContent = recipe.strMeal;
 
-  recipeImg.classList.add("recipe__img");
-  recipeImg.src = recipe.strMealThumb; // change soon
-
-  recipeName.classList.add("recipe__name");
-  recipeName.textContent = recipe.strMeal; // change soon
-
-  recipeCategory.classList.add("recipe__category");
-  recipeCategory.textContent = recipe.strCategory; // change soon
-
-  recipeIngredients.classList.add("recipe__section-title");
-  recipeIngredients.textContent = "Ingredients";
-
-  recipeIngredientsList.classList.add("recipe__ingredients-list");
-
-  recipeInstructions.classList.add("recipe__section-title");
-  recipeInstructions.textContent = "Instructions";
-
-  recipeInstructionsList.classList.add("recipe__instructions-list");
+  recipeCategory.textContent = recipe.strCategory;
 
   // Iterate over the recipe keys and add the ingredients and measures keys in the  empty arrays.
   recipeObjKeys.forEach((key) => {
@@ -82,6 +137,7 @@ function getRecipeHTML(recipe) {
         recipe[measureKeys[i]]
       } `;
       recipeIngredientsList.append(recipeIngredientsItem);
+      // make a function for both ingredients and instructions to avoid duplicate code
     }
   }
 
@@ -101,17 +157,21 @@ function getRecipeHTML(recipe) {
     recipeInstructionsList.append(recipeInstructionsItem);
   });
 
-  // Append all html elements to the recipeSection
-  recipeSection.append(
-    recipeImg,
-    recipeName,
-    recipeCategory,
-    recipeIngredients,
-    recipeIngredientsList,
-    recipeInstructions,
-    recipeInstructionsList
-  );
-
-  // Insert recipeSection to the main element in HTML
-  mainPageDescription.insertAdjacentElement("afterend", recipeSection);
+  recipeSection.classList.remove("hidden");
 }
+
+function clearRecipesLists() {
+  recipeIngredientsList.innerHTML = "";
+  recipeInstructionsList.innerHTML = "";
+}
+
+buttonGenerate.addEventListener("click", function () {
+  mainPageImg.style.display = "none";
+  mainPageDescription.style.gridColumn = "1 / -1";
+  // mainPageDescription.style.textAlign = "center";
+
+  clearRecipesLists();
+  getRecipe();
+});
+
+// verify if recipe obj it's the same with details of my displayed recipe container

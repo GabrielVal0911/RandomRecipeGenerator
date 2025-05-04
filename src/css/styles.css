@@ -54,6 +54,7 @@ body {
     "img"
     "title"
     "description"
+    "recipe"
     "btn";
   gap: 1em 0;
   height: 90%;
@@ -101,12 +102,12 @@ body {
   align-self: center;
   justify-self: center;
   grid-area: img;
-  display: none;
+  /* display: none; */
 }
 
-.mainPage__description {
+/* .mainPage__description {
   display: none;
-}
+} */
 
 .button--generate {
   font-size: 1.1rem;
@@ -122,11 +123,13 @@ ol {
 .recipe {
   /* width: 100%; */
   background-color: white;
-  margin-top: 2em;
+  margin-top: 1em;
   border-radius: 8px;
   padding: 0 1em;
   max-width: 750px;
   grid-row: 2 / -2;
+  grid-area: recipe;
+  justify-self: center;
 }
 
 .recipe__img {
@@ -169,6 +172,17 @@ ol {
   margin-bottom: 0.85em;
 }
 
+.error-message {
+  color: red;
+  grid-column: 1/ -1;
+  text-align: center;
+  font-weight: bold;
+}
+
+.hidden {
+  display: none;
+}
+
 /* .main__introductionPage:has(section.show) {
   .button--generate {
     grid-column: 1 / -1;
@@ -185,6 +199,7 @@ ol {
       ". ."
       "title img"
       "description img"
+      "recipe recipe"
       "btn .";
   }
 
@@ -223,7 +238,7 @@ ol {
 
   .main__introductionPage {
     margin: 0 auto;
-    align-content: center;
+    /* align-content: center;   */ /* That line cause an overlap of recipe container to nav  */
     gap: 0;
   }
 
