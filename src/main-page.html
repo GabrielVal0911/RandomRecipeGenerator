@@ -25,6 +25,7 @@
       />
     </nav>
     <main class="main__introductionPage" id="main__introductionPage">
+      <div id="loader" class="loader hidden"></div>
       <img
         src="img/cook-mainPage.png"
         alt="An illustration to someone who cook"
@@ -39,6 +40,54 @@
         Online Random Recipe Generator tool helps you to quickly generate a
         random recipe with a single click! 
       </p>
+
+      <div class="container__category" id="container__category">
+        <div class="category" tabindex="0" data-category="anything">
+          <img
+            src="/src/img/category-anything.png"
+            alt="hotdog illustration"
+            class="category--img"
+          />
+          <input
+            type="radio"
+            id="category-anything"
+            name="category"
+            value="anything"
+          />
+          <label for="category-anything">Anything</label>
+        </div>
+
+        <div class="category" tabindex="0">
+          <img
+            src="/src/img/category-vegetarian.png"
+            alt="bowl of fruits illustration"
+            class="category--img"
+          />
+          <input
+            type="radio"
+            id="category-vegetarian"
+            name="category"
+            value="vegetarian"
+          />
+          <label for="category-vegetarian">Vegetarian</label>
+        </div>
+
+        <div class="category" tabindex="0">
+          <img
+            src="/src/img/category-vegan.png"
+            alt="bowl of salad illustration"
+            class="category--img"
+          />
+          <!-- change this image -->
+          <input
+            type="radio"
+            id="category-vegan"
+            name="category"
+            value="vegan"
+          />
+          <label for="category-vegan">Vegan</label>
+        </div>
+      </div>
 
       <button class="button button--generate" id="button--generate">
         Generate

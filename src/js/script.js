@@ -3,6 +3,7 @@ const buttonGenerate = document.getElementById("button--generate");
 const mainPageDescription = document.getElementById("mainPage__description");
 const mainIntroductionPage = document.getElementById("main__introductionPage");
 const mainPageImg = document.getElementById("mainPage--img");
+const containerCategory = document.getElementById("container__category");
 
 // create html elements
 const recipeSection = document.createElement("section");
@@ -16,7 +17,7 @@ const recipeInstructionsList = document.createElement("ol");
 
 // add css classes to html elements
 recipeSection.classList.add("recipe");
-recipeSection.classList.add("hidden");
+addHiddenClass(recipeSection);
 
 recipeImg.classList.add("recipe__img");
 
@@ -46,7 +47,7 @@ recipeSection.append(
 );
 
 // Insert recipeSection to the main element in HTML
-mainPageDescription.insertAdjacentElement("afterend", recipeSection);
+containerCategory.insertAdjacentElement("afterend", recipeSection);
 
 async function getRecipe() {
   const url = "https://www.themealdb.com/api/json/v1/1/random.php";
@@ -55,8 +56,8 @@ async function getRecipe() {
     if (!response.ok) {
       throw new Error(`Response status: ${response.status}`);
     }
-
     const recipe = await response.json();
+    hideLoader();
     getRecipeHTML(recipe.meals[0]);
   } catch (error) {
     const p = document.createElement("p");
@@ -165,13 +166,43 @@ function clearRecipesLists() {
   recipeInstructionsList.innerHTML = "";
 }
 
+function hideLoader() {
+  const loader = document.getElementById("loader");
+  addHiddenClass(loader);
+}
+
+function showLoader() {
+  const loader = document.getElementById("loader");
+  loader.classList.remove("hidden");
+}
+
+function addHiddenClass(element) {
+  element.classList.add("hidden");
+}
+
 buttonGenerate.addEventListener("click", function () {
   mainPageImg.style.display = "none";
   mainPageDescription.style.gridColumn = "1 / -1";
   // mainPageDescription.style.textAlign = "center";
-
+  // recipeSection.classList.add("hidden");
+  addHiddenClass(recipeSection);
+  showLoader();
   clearRecipesLists();
   getRecipe();
+  selectRecipeCategory();
 });
 
+// need to refactor this function
+function selectRecipeCategory() {
+  const categoryContainer = document.querySelectorAll(".category");
+  let category = "";
+  // console.log(categoryContainer.dataset.category);
+  categoryContainer.forEach((el) => {
+    if (el.dataset.category === "anything") {
+      console.log(el.dataset.category);
+    }
+  });
+}
+
+// selectRecipeCategory();
 // verify if recipe obj it's the same with details of my displayed recipe container

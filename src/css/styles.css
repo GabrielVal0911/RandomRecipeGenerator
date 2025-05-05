@@ -54,10 +54,12 @@ body {
     "img"
     "title"
     "description"
+    "category"
     "recipe"
     "btn";
   gap: 1em 0;
   height: 90%;
+  position: relative;
   /* border: 2px solid magenta; */
 }
 .main__introduction-img {
@@ -183,6 +185,66 @@ ol {
   display: none;
 }
 
+.loader {
+  border: 8px solid #9381ff;
+  border-top: 8px solid #b8b8ff;
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+  animation: spin 1s linear infinite;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left: -20px;
+  margin-top: -20px;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* recipe category */
+
+.container__category {
+  display: flex;
+  border: 2px solid green;
+  /* justify-content: left; */
+  flex-wrap: wrap;
+  gap: 1em;
+  grid-area: category;
+  grid-column: 1 / 2;
+}
+
+.category {
+  border: 2px solid red;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-width: 100px;
+  cursor: pointer;
+  gap: 0.5em;
+}
+
+.category:hover,
+.category:focus {
+  /* background-color: #0d47a1; */
+  background-color: #005685;
+  color: white;
+}
+
+.category--img {
+  width: 50px;
+}
+input[type="radio"] {
+  display: none;
+}
+
 /* .main__introductionPage:has(section.show) {
   .button--generate {
     grid-column: 1 / -1;
@@ -199,6 +261,7 @@ ol {
       ". ."
       "title img"
       "description img"
+      "category category"
       "recipe recipe"
       "btn .";
   }
