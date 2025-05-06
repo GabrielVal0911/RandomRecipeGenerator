@@ -58,7 +58,6 @@ body {
     "recipe"
     "btn";
   gap: 1em 0;
-  height: 90%;
   position: relative;
   /* border: 2px solid magenta; */
 }
@@ -114,6 +113,7 @@ body {
 .button--generate {
   font-size: 1.1rem;
   padding: 0.65em 1.65em;
+  margin: 0.75em 0;
 }
 
 /* recipe section */
@@ -143,7 +143,7 @@ ol {
 
 .recipe__name {
   font-size: 1.5rem;
-  margin: 0.35em 0;
+  margin-bottom: 0.2em;
 }
 
 .recipe__category {
@@ -158,6 +158,7 @@ ol {
 
 .recipe__section-title {
   font-size: 1.15rem;
+  margin-top: 0.5em;
 }
 
 .recipe__ingredients-item,
@@ -179,6 +180,7 @@ ol {
   grid-column: 1/ -1;
   text-align: center;
   font-weight: bold;
+  margin-top: 0.5em;
 }
 
 .hidden {
@@ -212,30 +214,31 @@ ol {
 
 .container__category {
   display: flex;
-  border: 2px solid green;
-  /* justify-content: left; */
+  /* border: 2px solid green; */
+  margin-top: 1.5em;
+  justify-content: center;
   flex-wrap: wrap;
   gap: 1em;
   grid-area: category;
-  grid-column: 1 / 2;
 }
 
 .category {
-  border: 2px solid red;
+  /* border: 2px solid red; */
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  min-width: 100px;
+  padding: 1em 0;
+  min-width: 120px;
   cursor: pointer;
   gap: 0.5em;
 }
 
 .category:hover,
-.category:focus {
-  /* background-color: #0d47a1; */
+.active {
   background-color: #005685;
   color: white;
+  border-radius: 5px;
 }
 
 .category--img {
@@ -276,14 +279,22 @@ input[type="radio"] {
     font-size: 1.25rem;
   }
 
-  .button--getStarted,
-  .button--generate {
+  .button--getStarted {
     justify-self: start;
+  }
+
+  .button--generate {
+    grid-column: 1 / -1;
+    justify-self: center;
   }
 
   .recipe {
     grid-column: 1 / -1;
     margin-bottom: 0.75em;
+  }
+
+  .container__category {
+    grid-column: 1 / -1;
   }
 }
 
@@ -301,7 +312,6 @@ input[type="radio"] {
 
   .main__introductionPage {
     margin: 0 auto;
-    /* align-content: center;   */ /* That line cause an overlap of recipe container to nav  */
     gap: 0;
   }
 
@@ -323,6 +333,7 @@ input[type="radio"] {
 
   .mainPage__description {
     font-size: 1.6rem;
+    margin-top: 0.75em;
   }
 
   .mainPage--img {
@@ -335,6 +346,33 @@ input[type="radio"] {
 
   .recipe__img {
     max-width: 130px;
+  }
+
+  .container__category {
+    margin: 3em 0 1.75em;
+  }
+
+  .mainPage__description--centerText {
+    text-align: center;
+  }
+
+  .recipe__category {
+    font-size: 1rem;
+  }
+
+  .recipe__name {
+    font-size: 1.85em;
+  }
+
+  .recipe__section-title {
+    font-size: 1.4rem;
+  }
+
+  .recipe__ingredients-item {
+    font-size: 1.1rem;
+  }
+  .recipe__instruction-item {
+    font-size: 0.95rem;
   }
 }
 
@@ -354,21 +392,4 @@ input[type="radio"] {
   .button--generate {
     font-size: 1.25rem;
   }
-
-  /* .recipe__category {
-    font-size: 1rem;
-  }
-
-  .recipe__name {
-    font-size: 2.15em;
-  }
-
-  .recipe__section-title {
-    font-size: 1.5rem;
-  }
-
-  .recipe__ingredients-item,
-  .recipe__instruction-item {
-    font-size: 1rem;
-  } */
 }

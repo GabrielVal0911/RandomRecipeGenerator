@@ -4,6 +4,8 @@ const mainPageDescription = document.getElementById("mainPage__description");
 const mainIntroductionPage = document.getElementById("main__introductionPage");
 const mainPageImg = document.getElementById("mainPage--img");
 const containerCategory = document.getElementById("container__category");
+const recipeCategories = document.querySelectorAll(".category");
+let datasetCategory = "anything";
 
 // create html elements
 const recipeSection = document.createElement("section");
@@ -50,22 +52,41 @@ recipeSection.append(
 containerCategory.insertAdjacentElement("afterend", recipeSection);
 
 async function getRecipe() {
-  const url = "https://www.themealdb.com/api/json/v1/1/random.php";
+  const urlRandomRecipe = "https://www.themealdb.com/api/json/v1/1/random.php";
+  const urlCategoryRecipe = `https://www.themealdb.com/api/json/v1/1/filter.php?c=${datasetCategory}`;
+
   try {
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error(`Response status: ${response.status}`);
+    if (datasetCategory === "anything") {
+      const recipe = await fetchJSON(urlRandomRecipe);
+      hideLoader();
+      getRecipeHTML(recipe.meals[0]);
+    } else {
+      const recipe = await fetchJSON(urlCategoryRecipe);
+      if (!recipe.meals || recipe.meals.length === 0)
+        throw new Error("No meals found!");
+      const randomMeal = Math.floor(Math.random() * recipe.meals.length);
+
+      const fullMeal = await fetchJSON(
+        `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${recipe.meals[randomMeal].idMeal}`
+      );
+      hideLoader();
+      getRecipeHTML(fullMeal.meals[0]);
     }
-    const recipe = await response.json();
-    hideLoader();
-    getRecipeHTML(recipe.meals[0]);
   } catch (error) {
+    const errorMessage = mainIntroductionPage.querySelector(".error-message");
+    if (errorMessage) {
+      errorMessage.remove();
+    }
     const p = document.createElement("p");
     p.classList.add("error-message");
     p.textContent =
       "There was a problem loading the recipe. Here's a backup one for you!";
 
-    mainIntroductionPage.insertAdjacentElement("afterbegin", p);
+    if (recipeSection) {
+      recipeSection.insertAdjacentElement("afterbegin", p);
+    } else {
+      mainIntroductionPage.insertAdjacentElement("afterbegin", p);
+    }
 
     const fallbackRecipe = {
       idMeal: "52771",
@@ -95,10 +116,16 @@ async function getRecipe() {
       strMeasure7: "6 leaves",
       strMeasure8: "sprinkling",
     };
+    hideLoader();
     getRecipeHTML(fallbackRecipe);
-
     console.error("API error:", error.message);
   }
+}
+
+async function fetchJSON(url) {
+  const response = await fetch(url);
+  if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
+  return response.json();
 }
 
 function getRecipeHTML(recipe) {
@@ -185,24 +212,25 @@ buttonGenerate.addEventListener("click", function () {
   mainPageDescription.style.gridColumn = "1 / -1";
   // mainPageDescription.style.textAlign = "center";
   // recipeSection.classList.add("hidden");
+  mainPageDescription.classList.add("mainPage__description--centerText");
   addHiddenClass(recipeSection);
   showLoader();
   clearRecipesLists();
   getRecipe();
-  selectRecipeCategory();
 });
 
-// need to refactor this function
-function selectRecipeCategory() {
-  const categoryContainer = document.querySelectorAll(".category");
-  let category = "";
-  // console.log(categoryContainer.dataset.category);
-  categoryContainer.forEach((el) => {
-    if (el.dataset.category === "anything") {
-      console.log(el.dataset.category);
-    }
-  });
-}
+containerCategory.addEventListener("click", function (e) {
+  e.preventDefault();
+
+  const parent = e.target.closest(".category");
+  if (!parent) return;
+
+  const activeCategory = containerCategory.querySelector(".category.active");
+  if (activeCategory) activeCategory.classList.remove("active");
+
+  parent.classList.add("active");
+  datasetCategory = parent.dataset.category;
+});
 
 // selectRecipeCategory();
 // verify if recipe obj it's the same with details of my displayed recipe container
