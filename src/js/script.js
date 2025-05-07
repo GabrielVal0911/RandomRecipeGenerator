@@ -1,3 +1,5 @@
+import { saveRecipeToStorage } from "./favorite-recipes.js";
+
 // gets elements from html
 const buttonGenerate = document.getElementById("button--generate");
 const mainPageDescription = document.getElementById("mainPage__description");
@@ -5,7 +7,10 @@ const mainIntroductionPage = document.getElementById("main__introductionPage");
 const mainPageImg = document.getElementById("mainPage--img");
 const containerCategory = document.getElementById("container__category");
 const recipeCategories = document.querySelectorAll(".category");
+const loader = document.getElementById("loader");
+const loaderOverlay = document.getElementById("loader-overlay");
 let datasetCategory = "anything";
+const favorites = [];
 
 // create html elements
 const recipeSection = document.createElement("section");
@@ -16,10 +21,20 @@ const recipeIngredients = document.createElement("h2");
 const recipeInstructions = document.createElement("h2");
 const recipeIngredientsList = document.createElement("ul");
 const recipeInstructionsList = document.createElement("ol");
+const favoriteRecipeIcon = document.createElement("i");
 
 // add css classes to html elements
 recipeSection.classList.add("recipe");
 addHiddenClass(recipeSection);
+
+favoriteRecipeIcon.classList.add(
+  "fa-regular", // fa-solid
+  "fa-heart",
+  "favorite-icon"
+);
+
+favoriteRecipeIcon.setAttribute("role", "button");
+favoriteRecipeIcon.setAttribute("tabindex", "0");
 
 recipeImg.classList.add("recipe__img");
 
@@ -39,6 +54,7 @@ recipeInstructionsList.classList.add("recipe__instructions-list");
 
 // Append all html elements to the recipeSection
 recipeSection.append(
+  favoriteRecipeIcon,
   recipeImg,
   recipeName,
   recipeCategory,
@@ -49,7 +65,9 @@ recipeSection.append(
 );
 
 // Insert recipeSection to the main element in HTML
-containerCategory.insertAdjacentElement("afterend", recipeSection);
+if (containerCategory) {
+  containerCategory.insertAdjacentElement("afterend", recipeSection);
+}
 
 async function getRecipe() {
   const urlRandomRecipe = "https://www.themealdb.com/api/json/v1/1/random.php";
@@ -60,6 +78,9 @@ async function getRecipe() {
       const recipe = await fetchJSON(urlRandomRecipe);
       hideLoader();
       getRecipeHTML(recipe.meals[0]);
+
+      favorites.push(recipe.meals[0]);
+      // saveRecipeToStorage(favorites);
     } else {
       const recipe = await fetchJSON(urlCategoryRecipe);
       if (!recipe.meals || recipe.meals.length === 0)
@@ -187,6 +208,7 @@ function getRecipeHTML(recipe) {
 
   recipeSection.classList.remove("hidden");
 }
+// de adaugat alt la imagini
 
 function clearRecipesLists() {
   recipeIngredientsList.innerHTML = "";
@@ -194,13 +216,13 @@ function clearRecipesLists() {
 }
 
 function hideLoader() {
-  const loader = document.getElementById("loader");
   addHiddenClass(loader);
+  addHiddenClass(loaderOverlay);
 }
 
 function showLoader() {
-  const loader = document.getElementById("loader");
   loader.classList.remove("hidden");
+  loaderOverlay.classList.remove("hidden");
 }
 
 function addHiddenClass(element) {
@@ -230,6 +252,11 @@ containerCategory.addEventListener("click", function (e) {
 
   parent.classList.add("active");
   datasetCategory = parent.dataset.category;
+});
+
+favoriteRecipeIcon.addEventListener("click", function () {
+  favoriteRecipeIcon.classList.toggle("fa-regular");
+  favoriteRecipeIcon.classList.toggle("fa-solid");
 });
 
 // selectRecipeCategory();

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Random Recipe Generator</title>
+
+    <!-- fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+      integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+
+    <!-- links -->
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/favorite-recipes.css" />
+  </head>
+  <body>
+    <nav class="nav">
+      <img
+        src="img/logo-food-nav.png"
+        alt="A logo that consists of cutlery and a green background."
+        class="nav__logo"
+      />
+      <a href="main-page.html" class="nav-favorite">Favorite</a>
+    </nav>
+    <main>
+      <section class="recipe__favorite">
+        <i class="fa-regular fa-heart favorite-icon recipe__favorite-icon"></i>
+        <img
+          src="/src/img/meal-img-test.jpg"
+          alt="meal photo"
+          class="recipe__img recipe__img--favorite"
+        />
+        <h1 class="recipe__name recipe__name--favorite">Creamy Tomato Soup</h1>
+        <span class="recipe__category recipe__category--favorite">Vegan</span>
+        <details class="recipe__details--favorite">
+          <summary>View ingredients and instructions</summary>
+          <h2 class="recipe__section-title">Ingredients</h2>
+          <ul class="recipe__ingredients-list">
+            <li class="recipe__ingredients-item">Carrots</li>
+            <li class="recipe__ingredients-item">Onion</li>
+            <li class="recipe__ingredients-item">Garlic</li>
+          </ul>
+          <h2 class="recipe__section-title">Instructions</h2>
+          <ol class="recipe__instructions-list">
+            <li class="recipe__instruction-item">Preheat oven to 180 C</li>
+            <li class="recipe__instruction-item">
+              pread a layer of potatoes over the base of a 1.5-litre oiled
+              gratin dish. Sprinkle over a few onions (see picture, above) and
+              continue layering, finishing with a layer of potatoes.
+            </li>
+            <li class="recipe__instruction-item">
+              Keeps for 5 days in an air tight tin or freeze for up to 1 month.
+            </li>
+          </ol>
+        </details>
+      </section>
+    </main>
+    <script type="module" src="js/favorite-recipes.js"></script>
+  </body>
+</html>

@@ -45,6 +45,21 @@ body {
 
 .nav {
   align-self: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav-favorite {
+  cursor: pointer;
+  text-decoration: none;
+  color: #005685;
+  /* transition: color 0.3s; */
+
+  /* &:hover,
+  &:focus {
+    color: #0085cc;
+  } */
 }
 
 .main__introductionPage {
@@ -93,6 +108,10 @@ body {
   &:focus {
     background-color: #0085cc;
   }
+
+  &:focus-visible {
+    outline: none;
+  }
 }
 
 /* main page */
@@ -132,6 +151,16 @@ ol {
   grid-row: 2 / -2;
   grid-area: recipe;
   justify-self: center;
+  position: relative;
+}
+
+.favorite-icon {
+  cursor: pointer;
+  position: absolute;
+  top: 40px;
+  right: 5%;
+  font-size: 1.4rem;
+  color: #e63946;
 }
 
 .recipe__img {
@@ -183,22 +212,28 @@ ol {
   margin-top: 0.5em;
 }
 
-.hidden {
-  display: none;
+.loader-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  backdrop-filter: blur(10px);
+  background-color: rgba(255, 255, 255, 0.3);
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .loader {
-  border: 8px solid #9381ff;
-  border-top: 8px solid #b8b8ff;
+  border: 8px solid #d1b3ff;
+  border-top: 8px solid #5a00cc;
   border-radius: 50%;
   width: 80px;
   height: 80px;
   animation: spin 1s linear infinite;
   position: absolute;
-  top: 50%;
-  left: 50%;
-  margin-left: -20px;
-  margin-top: -20px;
 }
 
 @keyframes spin {
@@ -208,6 +243,10 @@ ol {
   100% {
     transform: rotate(360deg);
   }
+}
+
+.hidden {
+  display: none;
 }
 
 /* recipe category */
@@ -235,10 +274,15 @@ ol {
 }
 
 .category:hover,
+.category:focus-visible,
 .active {
   background-color: #005685;
   color: white;
   border-radius: 5px;
+}
+
+.category:focus-visible {
+  outline: none;
 }
 
 .category--img {
@@ -296,6 +340,10 @@ input[type="radio"] {
   .container__category {
     grid-column: 1 / -1;
   }
+
+  .favorite-icon {
+    font-size: 1.85rem;
+  }
 }
 
 @media (min-width: 700px) {
@@ -306,7 +354,6 @@ input[type="radio"] {
 
   .nav {
     width: 100%;
-
     justify-self: center;
   }
 
@@ -373,6 +420,10 @@ input[type="radio"] {
   }
   .recipe__instruction-item {
     font-size: 0.95rem;
+  }
+
+  .favorite-icon {
+    font-size: 2.1rem;
   }
 }
 
