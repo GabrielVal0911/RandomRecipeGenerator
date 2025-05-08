@@ -1,4 +1,5 @@
 import { saveRecipeToStorage } from "./favorite-recipes.js";
+import { getRecipeHTML } from "./recipeRenderer.js";
 
 // gets elements from html
 const buttonGenerate = document.getElementById("button--generate");
@@ -11,6 +12,7 @@ const loader = document.getElementById("loader");
 const loaderOverlay = document.getElementById("loader-overlay");
 let datasetCategory = "anything";
 const favorites = [];
+let copyRecipeObj = "";
 
 // create html elements
 const recipeSection = document.createElement("section");
@@ -69,6 +71,14 @@ if (containerCategory) {
   containerCategory.insertAdjacentElement("afterend", recipeSection);
 }
 
+const htmlElements = {
+  recipeImg,
+  recipeName,
+  recipeCategory,
+  recipeIngredientsList,
+  recipeInstructionsList,
+};
+
 async function getRecipe() {
   const urlRandomRecipe = "https://www.themealdb.com/api/json/v1/1/random.php";
   const urlCategoryRecipe = `https://www.themealdb.com/api/json/v1/1/filter.php?c=${datasetCategory}`;
@@ -77,10 +87,8 @@ async function getRecipe() {
     if (datasetCategory === "anything") {
       const recipe = await fetchJSON(urlRandomRecipe);
       hideLoader();
-      getRecipeHTML(recipe.meals[0]);
-
-      favorites.push(recipe.meals[0]);
-      // saveRecipeToStorage(favorites);
+      getRecipeHTML(recipe.meals[0], htmlElements);
+      copyRecipeObj = { ...recipe.meals[0] };
     } else {
       const recipe = await fetchJSON(urlCategoryRecipe);
       if (!recipe.meals || recipe.meals.length === 0)
@@ -91,7 +99,8 @@ async function getRecipe() {
         `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${recipe.meals[randomMeal].idMeal}`
       );
       hideLoader();
-      getRecipeHTML(fullMeal.meals[0]);
+      getRecipeHTML(fullMeal.meals[0], htmlElements);
+      copyRecipeObj = { ...fullMeal.meals[0] };
     }
   } catch (error) {
     const errorMessage = mainIntroductionPage.querySelector(".error-message");
@@ -138,7 +147,7 @@ async function getRecipe() {
       strMeasure8: "sprinkling",
     };
     hideLoader();
-    getRecipeHTML(fallbackRecipe);
+    getRecipeHTML(fallbackRecipe, htmlElements);
     console.error("API error:", error.message);
   }
 }
@@ -148,67 +157,6 @@ async function fetchJSON(url) {
   if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
   return response.json();
 }
-
-function getRecipeHTML(recipe) {
-  // get all keys from recipe object
-  // initialize empty arrays for ingredients key
-  const recipeObjKeys = Object.keys(recipe);
-  let measureKeys = [];
-  let ingredientKeys = [];
-
-  recipeImg.src = recipe.strMealThumb;
-
-  recipeName.textContent = recipe.strMeal;
-
-  recipeCategory.textContent = recipe.strCategory;
-
-  // Iterate over the recipe keys and add the ingredients and measures keys in the  empty arrays.
-  recipeObjKeys.forEach((key) => {
-    if (key.includes("strIngredient")) {
-      ingredientKeys.push(key);
-    }
-    if (key.includes("strMeasure")) {
-      measureKeys.push(key);
-    }
-  });
-
-  // Iterate over the ingredient keys.
-  // If the recipe object has the current ingredient key,
-  // create an <li> element, add a CSS class, set its textContent
-  // to the ingredient's value and its corresponding measure,
-  // and append the <li> to the <ul>.
-
-  for (let i = 0; i < ingredientKeys.length; i++) {
-    if (recipe[ingredientKeys[i]]) {
-      const recipeIngredientsItem = document.createElement("li");
-      recipeIngredientsItem.classList.add("recipe__ingredients-item");
-      recipeIngredientsItem.textContent = `${recipe[ingredientKeys[i]]} - ${
-        recipe[measureKeys[i]]
-      } `;
-      recipeIngredientsList.append(recipeIngredientsItem);
-      // make a function for both ingredients and instructions to avoid duplicate code
-    }
-  }
-
-  // Take the string and separate them after that sequence "\r\n"
-  // Remove empty spaces
-  const instructions = recipe.strInstructions
-    .split("\r\n")
-    .filter((instruction) => instruction);
-
-  // Iterate over the instrutions array
-  // create an <li> element, add a CSS class, set its textContent
-  // and append the <li> to the <ul>
-  instructions.forEach((instruction) => {
-    const recipeInstructionsItem = document.createElement("li");
-    recipeInstructionsItem.classList.add("recipe__instruction-item");
-    recipeInstructionsItem.textContent = instruction;
-    recipeInstructionsList.append(recipeInstructionsItem);
-  });
-
-  recipeSection.classList.remove("hidden");
-}
-// de adaugat alt la imagini
 
 function clearRecipesLists() {
   recipeIngredientsList.innerHTML = "";
@@ -229,6 +177,10 @@ function addHiddenClass(element) {
   element.classList.add("hidden");
 }
 
+function removeHiddenClass(element) {
+  element.classList.remove("hidden");
+}
+
 buttonGenerate.addEventListener("click", function () {
   mainPageImg.style.display = "none";
   mainPageDescription.style.gridColumn = "1 / -1";
@@ -238,7 +190,11 @@ buttonGenerate.addEventListener("click", function () {
   addHiddenClass(recipeSection);
   showLoader();
   clearRecipesLists();
+  removeHiddenClass(recipeSection);
   getRecipe();
+  favoriteRecipeIcon.classList.remove("fa-solid");
+  favoriteRecipeIcon.classList.add("fa-regular");
+  saveRecipeToStorage(removeDuplicateObjects(favorites));
 });
 
 containerCategory.addEventListener("click", function (e) {
@@ -257,7 +213,25 @@ containerCategory.addEventListener("click", function (e) {
 favoriteRecipeIcon.addEventListener("click", function () {
   favoriteRecipeIcon.classList.toggle("fa-regular");
   favoriteRecipeIcon.classList.toggle("fa-solid");
+  if (favoriteRecipeIcon.classList.contains("fa-solid")) {
+    favorites.push(copyRecipeObj);
+    console.log("yes");
+  } else {
+    favorites.pop(copyRecipeObj);
+    console.log("no");
+  }
 });
 
-// selectRecipeCategory();
+function removeDuplicateObjects(arr) {
+  const uniqueMap = new Map();
+
+  for (const recipe of arr) {
+    if (!uniqueMap.has(recipe.idMeal)) {
+      uniqueMap.set(recipe.idMeal, recipe);
+    }
+  }
+
+  return Array.from(uniqueMap.values());
+}
+
 // verify if recipe obj it's the same with details of my displayed recipe container
