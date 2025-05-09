@@ -1,6 +1,7 @@
 import { getRecipeHTML } from "./recipeRenderer.js";
 
 const main = document.getElementById("main");
+const favoriteEmpty = document.getElementById("favorite__empty");
 let favoriteRecipeIcon;
 
 // function that detecs whether localStorage is both supported and available:
@@ -32,7 +33,7 @@ export function saveRecipeToStorage(recipeObj) {
   }
 }
 
-function loadRecipeFromStorage() {
+export function loadRecipeFromStorage() {
   const recipeObj = localStorage.getItem("recipe");
   return recipeObj ? JSON.parse(recipeObj) : null;
 }
@@ -115,6 +116,7 @@ function createFavoriteRecipeElement(recipe) {
 }
 
 const recipes = loadRecipeFromStorage();
+isEmpty(recipes);
 
 if (Array.isArray(recipes) && recipes.length) {
   recipes.forEach((recipe) => {
@@ -123,4 +125,14 @@ if (Array.isArray(recipes) && recipes.length) {
       main.insertAdjacentElement("afterbegin", recipeElement);
     }
   });
+}
+
+function isEmpty() {
+  if (favoriteEmpty) {
+    if (Array.isArray(recipes) && recipes.length > 0) {
+      favoriteEmpty.style.display = "none";
+    } else {
+      favoriteEmpty.style.display = "flex";
+    }
+  }
 }

@@ -1,5 +1,6 @@
 import { saveRecipeToStorage } from "./favorite-recipes.js";
 import { getRecipeHTML } from "./recipeRenderer.js";
+import { loadRecipeFromStorage } from "./favorite-recipes.js";
 
 // gets elements from html
 const buttonGenerate = document.getElementById("button--generate");
@@ -11,8 +12,9 @@ const recipeCategories = document.querySelectorAll(".category");
 const loader = document.getElementById("loader");
 const loaderOverlay = document.getElementById("loader-overlay");
 let datasetCategory = "anything";
-const favorites = [];
+const favorites = loadRecipeFromStorage() || [];
 let copyRecipeObj = "";
+let modified = false;
 
 // create html elements
 const recipeSection = document.createElement("section");
@@ -89,6 +91,8 @@ async function getRecipe() {
       hideLoader();
       getRecipeHTML(recipe.meals[0], htmlElements);
       copyRecipeObj = { ...recipe.meals[0] };
+      const isFav = isFavorite(favorites, recipe.meals[0]);
+      updateFavoriteIcon(favoriteRecipeIcon, isFav);
     } else {
       const recipe = await fetchJSON(urlCategoryRecipe);
       if (!recipe.meals || recipe.meals.length === 0)
@@ -101,6 +105,8 @@ async function getRecipe() {
       hideLoader();
       getRecipeHTML(fullMeal.meals[0], htmlElements);
       copyRecipeObj = { ...fullMeal.meals[0] };
+      const isFav = isFavorite(favorites, fullMeal.meals[0]);
+      updateFavoriteIcon(favoriteRecipeIcon, isFav);
     }
   } catch (error) {
     const errorMessage = mainIntroductionPage.querySelector(".error-message");
@@ -192,9 +198,7 @@ buttonGenerate.addEventListener("click", function () {
   clearRecipesLists();
   removeHiddenClass(recipeSection);
   getRecipe();
-  favoriteRecipeIcon.classList.remove("fa-solid");
-  favoriteRecipeIcon.classList.add("fa-regular");
-  saveRecipeToStorage(removeDuplicateObjects(favorites));
+  updateFavoriteIcon(favoriteRecipeIcon, false);
 });
 
 containerCategory.addEventListener("click", function (e) {
@@ -215,10 +219,20 @@ favoriteRecipeIcon.addEventListener("click", function () {
   favoriteRecipeIcon.classList.toggle("fa-solid");
   if (favoriteRecipeIcon.classList.contains("fa-solid")) {
     favorites.push(copyRecipeObj);
-    console.log("yes");
+    modified = true;
   } else {
-    favorites.pop(copyRecipeObj);
-    console.log("no");
+    const index = favorites.findIndex(
+      (recipe) => recipe.idMeal === copyRecipeObj.idMeal
+    );
+
+    if (index !== -1) {
+      favorites.splice(index, 1);
+      modified = true;
+    }
+  }
+
+  if (modified) {
+    saveRecipeToStorage(removeDuplicateObjects(favorites));
   }
 });
 
@@ -232,6 +246,19 @@ function removeDuplicateObjects(arr) {
   }
 
   return Array.from(uniqueMap.values());
+}
+
+function isFavorite(localStorageFavoriteObj, recipeObj) {
+  if (localStorageFavoriteObj) {
+    return localStorageFavoriteObj.some(
+      (favoriteRecipe) => favoriteRecipe.idMeal === recipeObj.idMeal
+    );
+  }
+}
+
+function updateFavoriteIcon(iconElement, isFavorite) {
+  iconElement.classList.toggle("fa-solid", isFavorite);
+  iconElement.classList.toggle("fa-regular", !isFavorite);
 }
 
 // verify if recipe obj it's the same with details of my displayed recipe container
