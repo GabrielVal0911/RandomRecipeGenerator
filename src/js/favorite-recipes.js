@@ -63,6 +63,7 @@ function createFavoriteRecipeElement(recipe) {
   );
   favoriteRecipeIcon.setAttribute("role", "button");
   favoriteRecipeIcon.setAttribute("tabindex", "0");
+  favoriteRecipeIcon.setAttribute("data-id", recipe.idMeal);
 
   recipeImg.classList.add("recipe__img", "recipe__img--favorite");
   // de adaugat alt
@@ -112,6 +113,7 @@ function createFavoriteRecipeElement(recipe) {
     recipeInstructionsList,
   });
 
+  updateFavoriteIcon(favoriteRecipeIcon, true);
   return recipeSectionFavorite;
 }
 
@@ -127,6 +129,17 @@ if (Array.isArray(recipes) && recipes.length) {
   });
 }
 
+document.addEventListener("click", function (e) {
+  if (e.target.dataset.id) {
+    if (e.target.classList.contains("fa-solid")) {
+      updateFavoriteIcon(e.target, false);
+      removeRecipeFromLocalStorage(recipes, e.target.dataset.id);
+    } else {
+      updateFavoriteIcon(e.target, true);
+    }
+  }
+});
+
 function isEmpty() {
   if (favoriteEmpty) {
     if (Array.isArray(recipes) && recipes.length > 0) {
@@ -135,4 +148,24 @@ function isEmpty() {
       favoriteEmpty.style.display = "flex";
     }
   }
+}
+
+// need to update this function, when icon has fa-solid, add in localSTorage,else remove it
+function removeRecipeFromLocalStorage(favoriteRecipes, favoriteRecipeId) {
+  const index = favoriteRecipes.findIndex((recipe) => {
+    return recipe.idMeal === favoriteRecipeId;
+  });
+  console.log(index);
+  if (index !== -1) {
+    console.log(index);
+    recipes.splice(index, 1);
+    console.log(recipes);
+
+    saveRecipeToStorage(recipes);
+  }
+}
+
+function updateFavoriteIcon(iconElement, isFavorite) {
+  iconElement.classList.toggle("fa-solid", isFavorite);
+  iconElement.classList.toggle("fa-regular", !isFavorite);
 }
