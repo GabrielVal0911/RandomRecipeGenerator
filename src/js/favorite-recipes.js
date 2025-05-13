@@ -122,8 +122,8 @@ isEmpty(recipes);
 
 if (Array.isArray(recipes) && recipes.length) {
   recipes.forEach((recipe) => {
-    const recipeElement = createFavoriteRecipeElement(recipe);
-    if (main) {
+    if (recipe && main) {
+      const recipeElement = createFavoriteRecipeElement(recipe);
       main.insertAdjacentElement("afterbegin", recipeElement);
     }
   });
@@ -133,9 +133,10 @@ document.addEventListener("click", function (e) {
   if (e.target.dataset.id) {
     if (e.target.classList.contains("fa-solid")) {
       updateFavoriteIcon(e.target, false);
-      removeRecipeFromLocalStorage(recipes, e.target.dataset.id);
+      updateRecipeFromLocalStorage(e.target.dataset.id, false);
     } else {
       updateFavoriteIcon(e.target, true);
+      updateRecipeFromLocalStorage(e.target.dataset.id, true);
     }
   }
 });
@@ -150,19 +151,22 @@ function isEmpty() {
   }
 }
 
-// need to update this function, when icon has fa-solid, add in localSTorage,else remove it
-function removeRecipeFromLocalStorage(favoriteRecipes, favoriteRecipeId) {
-  const index = favoriteRecipes.findIndex((recipe) => {
-    return recipe.idMeal === favoriteRecipeId;
-  });
-  console.log(index);
-  if (index !== -1) {
-    console.log(index);
-    recipes.splice(index, 1);
-    console.log(recipes);
+const copiedLocalStorage = loadRecipeFromStorage();
 
-    saveRecipeToStorage(recipes);
+function updateRecipeFromLocalStorage(favoriteRecipeId, shouldAddToFavorites) {
+  let index;
+
+  if (!shouldAddToFavorites) {
+    index = copiedLocalStorage.findIndex((recipe) => {
+      return recipe.idMeal === favoriteRecipeId;
+    });
+    copiedLocalStorage.splice(index, 1);
+  } else if (shouldAddToFavorites) {
+    index = recipes.findIndex((recipe) => recipe.idMeal === favoriteRecipeId);
+    const item = recipes.find((recipe) => recipe.idMeal === favoriteRecipeId);
+    copiedLocalStorage.splice(index, 0, item);
   }
+  saveRecipeToStorage(copiedLocalStorage);
 }
 
 function updateFavoriteIcon(iconElement, isFavorite) {

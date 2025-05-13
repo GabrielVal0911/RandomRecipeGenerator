@@ -4,7 +4,7 @@
   border-radius: 8px;
   padding: 1em;
   display: grid;
-
+  min-width: 190px;
   grid-template-columns: 1fr 1fr;
   grid-template-areas:
     "img img"
