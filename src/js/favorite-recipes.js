@@ -66,7 +66,6 @@ function createFavoriteRecipeElement(recipe) {
   favoriteRecipeIcon.setAttribute("data-id", recipe.idMeal);
 
   recipeImg.classList.add("recipe__img", "recipe__img--favorite");
-  // de adaugat alt
 
   recipeName.classList.add("recipe__name", "recipe__name--favorite");
 

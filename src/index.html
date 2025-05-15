@@ -4,6 +4,11 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Random Recipe Generator</title>
+    <link rel="icon" type="image/png" href="./img/img-titlebar.png" />
+    <meta
+      name="description"
+      content="Discover random and easy recipes instantly. The Random Recipe Generator is your go-to tool when you need quick inspiration for your next meal."
+    />
 
     <!-- fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -23,6 +28,10 @@
         alt="A logo that consists of cutlery and a green background."
         class="nav__logo"
       />
+      <div class="nav-links">
+        <a href="main-page.html" class="nav-home">Home</a>
+        <a href="favorite-recipes.html" class="nav-favorite">Favorite</a>
+      </div>
     </nav>
     <main class="main__introductionPage">
       <img
@@ -35,7 +44,14 @@
         This random recipe generator helps you when you want to find new meals
         to cook.
       </p>
-      <button class="button button--getStarted">Get Started</button>
+      <button class="button button--getStarted" id="button--getStarted">
+        Get Started
+      </button>
     </main>
+    <script>
+      document.getElementById("button--getStarted").onclick = function () {
+        window.location.href = "main-page.html";
+      };
+    </script>
   </body>
 </html>
