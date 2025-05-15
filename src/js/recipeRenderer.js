@@ -13,7 +13,7 @@ export function getRecipeHTML(recipe, elements) {
   let ingredientKeys = [];
 
   recipeImg.src = recipe.strMealThumb;
-  // de adaugat alt la imagini
+  recipeImg.alt = recipe.strMeal;
 
   recipeName.textContent = recipe.strMeal;
 
@@ -48,10 +48,14 @@ export function getRecipeHTML(recipe, elements) {
   }
 
   // Take the string and separate them after that sequence "\r\n"
+  // Remove numbers if they have
   // Remove empty spaces
   const instructions = recipe.strInstructions
     .split("\r\n")
-    .filter((instruction) => instruction);
+    .map((instruction) => {
+      return instruction.replace(/^\d+\s*[\.\-]?\s*/, "");
+    })
+    .filter((instruction) => instruction.trim() !== "");
 
   // Iterate over the instrutions array
   // create an <li> element, add a CSS class, set its textContent

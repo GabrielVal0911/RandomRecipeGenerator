@@ -8,7 +8,6 @@ const mainPageDescription = document.getElementById("mainPage__description");
 const mainIntroductionPage = document.getElementById("main__introductionPage");
 const mainPageImg = document.getElementById("mainPage--img");
 const containerCategory = document.getElementById("container__category");
-const recipeCategories = document.querySelectorAll(".category");
 const loader = document.getElementById("loader");
 const loaderOverlay = document.getElementById("loader-overlay");
 let datasetCategory = "anything";
@@ -31,11 +30,7 @@ const favoriteRecipeIcon = document.createElement("i");
 recipeSection.classList.add("recipe");
 addHiddenClass(recipeSection);
 
-favoriteRecipeIcon.classList.add(
-  "fa-regular", // fa-solid
-  "fa-heart",
-  "favorite-icon"
-);
+favoriteRecipeIcon.classList.add("fa-regular", "fa-heart", "favorite-icon");
 
 favoriteRecipeIcon.setAttribute("role", "button");
 favoriteRecipeIcon.setAttribute("tabindex", "0");
@@ -175,8 +170,8 @@ function hideLoader() {
 }
 
 function showLoader() {
-  loader.classList.remove("hidden");
-  loaderOverlay.classList.remove("hidden");
+  removeHiddenClass(loader);
+  removeHiddenClass(loaderOverlay);
 }
 
 function addHiddenClass(element) {
@@ -190,8 +185,6 @@ function removeHiddenClass(element) {
 buttonGenerate.addEventListener("click", function () {
   mainPageImg.style.display = "none";
   mainPageDescription.style.gridColumn = "1 / -1";
-  // mainPageDescription.style.textAlign = "center";
-  // recipeSection.classList.add("hidden");
   mainPageDescription.classList.add("mainPage__description--centerText");
   addHiddenClass(recipeSection);
   showLoader();
