@@ -1,5 +1,7 @@
 # RandomRecipeGenerator
 
+LIVE: https://random-recipegenerator.netlify.app/
+
 Random Recipe Generator is a simple and user-friendly website that helps you decide what to cook when you're out of ideas. With a single click, you get a random recipe suggestion, and you can save your favorite ones for later.
 
 🔧 Features:
@@ -42,5 +44,3 @@ The recipes are fetched using a public Recipe API(https://www.themealdb.com/api.
 ![RandomRecipeGeneratorApp8](https://github.com/user-attachments/assets/9dd01c73-84e2-4ea0-9702-9865b1e72651)
 
 ![RandomRecipeGeneratorApp9](https://github.com/user-attachments/assets/c3f51cac-f11e-427d-b744-dc7df6fff3e9)
-
-
